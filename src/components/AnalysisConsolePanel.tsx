@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   Terminal, 
   CheckCircle2, 
@@ -25,9 +25,10 @@ export const AnalysisConsolePanel: React.FC<AnalysisConsolePanelProps> = ({
   errorMessage,
   onReset,
 }) => {
-  const [copied, setCopied] = useState(false);
-  const [displayedConfidence, setDisplayedConfidence] = useState(0);
+const [copied, setCopied] = useState(false);
+const [displayedConfidence, setDisplayedConfidence] = useState(0);
 
+const activeStepRef = useRef<HTMLDivElement | null>(null);
   // Confidence count-up ticker animation
   useEffect(() => {
     if (scanStatus === 'success' && result) {
@@ -53,6 +54,15 @@ export const AnalysisConsolePanel: React.FC<AnalysisConsolePanelProps> = ({
     }
     return undefined;
   }, [scanStatus, result]);
+  // Automatically scroll the active pipeline step into view
+useEffect(() => {
+  if (activeStepRef.current) {
+    activeStepRef.current.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+    });
+  }
+}, [steps]);
 
   const handleCopyName = () => {
     if (result?.extractedName) {
@@ -111,18 +121,19 @@ export const AnalysisConsolePanel: React.FC<AnalysisConsolePanelProps> = ({
           </div>
         ) : (
           /* Step-by-Step Vertical Log */
-          <div className="space-y-3 font-mono text-xs bg-[#080B12] border border-[#1E2836] rounded-lg p-4 mb-4 shadow-inner">
+          <div className="max-h-[520px] overflow-y-auto space-y-3 font-mono text-xs bg-[#080B12] border border-[#1E2836] rounded-lg p-4 mb-4 shadow-inner scroll-smooth">
             {steps.map((step, idx) => (
-              <div
-                key={step.id}
-                className={`flex items-start justify-between p-2.5 rounded transition-all border ${
-                  step.status === 'active'
-                    ? 'bg-amber/5 border-amber/30 text-amber'
-                    : step.status === 'done'
-                    ? 'bg-[#121A28]/60 border-[#1E2836] text-text'
-                    : 'bg-transparent border-transparent text-text-faint opacity-50'
-                }`}
-              >
+  <div
+    key={step.id}
+    ref={step.status === 'active' ? activeStepRef : null}
+    className={`flex items-start justify-between p-2.5 rounded transition-all border ${
+      step.status === 'active'
+        ? 'bg-amber/5 border-amber/30 text-amber'
+        : step.status === 'done'
+        ? 'bg-[#121A28]/60 border-[#1E2836] text-text'
+        : 'bg-transparent border-transparent text-text-faint opacity-50'
+    }`}
+  >
                 <div className="flex items-start gap-3">
                   <div className="mt-0.5">{getStepIcon(step)}</div>
                   <div>
