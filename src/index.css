@@ -1,0 +1,130 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --ink: #080B12;
+    --panel: #0E141F;
+    --panel-2: #121A28;
+    --line: #1E2836;
+    --line-soft: #161F2C;
+    --text: #DCE3EC;
+    --text-dim: #7C8BA0;
+    --text-faint: #4B5568;
+    --amber: #F5A623;
+    --teal: #3FD0C9;
+    --rose: #F2545B;
+  }
+  
+  body {
+    background-color: var(--ink);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+/* Custom Scanline Animation */
+@keyframes scanline-sweep {
+  0% {
+    top: 0%;
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+.animate-scanline {
+  animation: scanline-sweep 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* Radar Sweep Animation */
+@keyframes radar-rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-radar {
+  animation: radar-rotation 4s linear infinite;
+}
+
+/* Looping Horizontal Scan for Hero Radar */
+@keyframes horizontal-scan {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(200%);
+    opacity: 0.3;
+  }
+}
+
+.animate-hero-scan {
+  animation: horizontal-scan 3s ease-in-out infinite;
+}
+
+/* Pulse Amber Glow */
+@keyframes amber-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.95);
+  }
+}
+
+.animate-amber-pulse {
+  animation: amber-pulse 1.5s ease-in-out infinite;
+}
+
+/* Grid Background */
+.bg-grid-pattern {
+  background-size: 20px 20px;
+  background-image: 
+    linear-gradient(to right, rgba(30, 40, 54, 0.4) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(30, 40, 54, 0.4) 1px, transparent 1px);
+}
+
+/* Hairline Border Utilities */
+.border-hairline {
+  border-width: 1px;
+  border-color: #1E2836;
+}
+
+.border-hairline-soft {
+  border-width: 1px;
+  border-color: #161F2C;
+}
+
+/* Custom Scrollbar for Terminal Log */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #0E141F;
+}
+::-webkit-scrollbar-thumb {
+  background: #1E2836;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #7C8BA0;
+}
